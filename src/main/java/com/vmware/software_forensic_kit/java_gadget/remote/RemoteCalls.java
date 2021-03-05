@@ -24,7 +24,7 @@ public class RemoteCalls{
 	private static RemoteCalls instance;
 	private JSch sshChannel;
 	private Session conn;
-	private boolean isConnected = false;
+	public boolean isConnected = false;
 	public static RemoteCalls getInstance() {
         if (instance == null) {
              instance = new RemoteCalls();
@@ -48,7 +48,7 @@ public class RemoteCalls{
 			isConnected = true;
 		} catch (JSchException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
     }
     private void transferFiles(String srcPath, String dstPath, ChannelSftp channel) throws SftpException, FileNotFoundException {
@@ -131,7 +131,10 @@ public class RemoteCalls{
 		} 
       
     }
-	public String sendCommand(String cmd) {
+    public String sendCommand(String cmd) {
+    	return _sendCommand(cmd, false);
+    }
+	public String _sendCommand(String cmd, boolean seeOutput) {
 		if(isConnected == false) {
 			System.out.println("Not connected connect first");
 		    System.exit(0);
@@ -147,8 +150,11 @@ public class RemoteCalls{
 	        
 	        int readByte = out.read();
 	        while(readByte != 0xffffffff) {
+	        	if(seeOutput == true)
+	        		System.out.print((char)readByte);
 	           outputBuffer.append((char)readByte);
 	           readByte = out.read();
+	           
 	        }
 
 	        channel.disconnect();
