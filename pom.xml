@@ -3,36 +3,11 @@
   <groupId>com.vmware.software_forensic_kit</groupId>
   <artifactId>software_forensic_kit</artifactId>
   <version>0.0.1-SNAPSHOT</version>
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-assembly-plugin</artifactId>
-		<configuration>
-		    <finalName>${project.artifactId}-${project.version}-all</finalName>
-			<appendAssemblyId>false</appendAssemblyId>
-			<archive>
-				<manifest>
-					<addClasspath>true</addClasspath>
-					<mainClass>com.vmware.software_forensic_kit.Java_Gadget_Kit</mainClass>
-				</manifest>
-			</archive>
-			<descriptorRefs>
-				<descriptorRef>jar-with-dependencies</descriptorRef>
-			</descriptorRefs>
-		</configuration>
-		<executions>
-			<execution>
-				<id>make-assembly</id> 
-				<phase>package</phase> 
-			<goals>
-				<goal>single</goal>
-			</goals>
-			</execution>
-		</executions>
-	  </plugin>
-	</plugins>
-  </build>
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
+  </properties>
   <repositories>
   <repository>
     <id>jitpack.io</id>
@@ -69,11 +44,64 @@
       <groupId>org.apache.bcel</groupId>
       <artifactId>bcel</artifactId>
       <version>6.0</version>
+      <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>javassist</groupId>
-      <artifactId>javassist</artifactId>
-      <version>3.12.1.GA</version>
-    </dependency>
+    <groupId>org.ow2.asm</groupId>
+    <artifactId>asm</artifactId>
+    <version>8.0.1</version>
+</dependency>
+<dependency>
+    <groupId>org.ow2.asm</groupId>
+    <artifactId>asm-util</artifactId>
+    <version>8.0.1</version>
+</dependency>
+<dependency>
+    <groupId>org.ow2.asm</groupId>
+    <artifactId>asm-commons</artifactId>
+    <version>8.0.1</version>
+</dependency>
+	<dependency>
+	  <groupId>com.sun</groupId>
+	  <artifactId>tools</artifactId>
+	  <version>1.8.0</version>
+	  <!--scope>system</scope>
+	  <systemPath>C:\Program Files\Java\jdk1.8.0_162\lib\tools.jar</systemPath-->
+	</dependency>
   </dependencies>
+  	<build>
+        <plugins>
+        <plugin>
+		  <groupId>org.apache.maven.plugins</groupId>
+		  <artifactId>maven-assembly-plugin</artifactId>
+		  <executions>
+		    <execution>
+		      <goals>
+		        <goal>single</goal>
+		      </goals>
+		      <phase>package</phase>
+		      <configuration>
+		        <descriptorRefs>
+		          <descriptorRef>jar-with-dependencies</descriptorRef>
+		        </descriptorRefs>
+		        <archive>
+		          <manifest>
+		          <addClasspath>true</addClasspath>
+		            <mainClass>com.vmware.software_forensic_kit.Java_Gadget_Kit</mainClass>
+		          </manifest>
+		          <manifestEntries>
+		           <Premain-Class>com.vmware.software_forensic_kit.java_gadget.agent.Java_Gadget_Agent</Premain-Class>
+            		<Agent-Class>com.vmware.software_forensic_kit.java_gadget.agent.Java_Gadget_Agent</Agent-Class>
+            		
+		            <Can-Redefine-Classes>true</Can-Redefine-Classes>
+		            <Can-Retransform-Classes>true</Can-Retransform-Classes>
+		          </manifestEntries>
+		        </archive>
+		      </configuration>
+		    </execution>
+		  </executions>
+		</plugin>
+   </plugins>
+   </build>
+  
 </project>
