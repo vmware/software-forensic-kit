@@ -67,7 +67,7 @@ public class CallGraphAnalysis{
 		discoveredFuncs = newfuncNames;
 		
 		if(discoveredFuncs.size() == 0) {
-			//System.out.println("Function Name Not Found");
+			System.out.println("Function Name Not Found");
 			//System.exit(0);
 		}	
 		this.parseOptionsAndExit(reverseFilterMap);
@@ -169,9 +169,6 @@ public class CallGraphAnalysis{
 			//newNode = startSearch(newNode, 1);
 			if(optionMap.containsKey("prettyPrint")) {
 				newNode.prettyPrint(maxDepth, removeFromStart, removeDuplicates);
-			}
-			else if(optionMap.containsKey("justPrint")) {
-				newNode.justPrint(maxDepth, removeFromStart, removeDuplicates);
 			}
 			else if(optionMap.containsKey("graphViz")) {
 				valList = newNode.htmlandgraphviz(false, maxDepth, removeFromStart, removeDuplicates);
@@ -310,7 +307,7 @@ public class CallGraphAnalysis{
 		"			nodeSpacing: 500\n" +
 		"		}\n" +
 		"	},\n" +
-		"	interaction: {dragNodes :true},\n" +
+		"	interaction: {dragNodes :false},\n" +
 		"	physics: {\n" +
 		"		enabled: false\n" +
 		"	},\n" +
@@ -342,12 +339,15 @@ public class CallGraphAnalysis{
 			funcName= funcName.replace("(", "_");
 			funcName = funcName.replace(")", "_");
 			funcName = funcName.replace(":", "_");
-			System.out.println(String.format("OUTFILE:[%s]",  path + sep + "files" + sep + "output" + sep + funcName + ".html"));
+			System.out.println("OUTFILE: " + path + sep + "files" + sep + "output" + sep + funcName + ".html");
 			BufferedWriter writer = new BufferedWriter(new FileWriter(path + sep + "files" + sep + "output" + sep + funcName + ".html"));
 			String outStr = String.format(out, funcName, Arrays.toString(nodes.toArray()), Arrays.toString(edges.toArray()));
 			writer.write(outStr);
 			writer.close();
 			
+		} catch (URISyntaxException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
