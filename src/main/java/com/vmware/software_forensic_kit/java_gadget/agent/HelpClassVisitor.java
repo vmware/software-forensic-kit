@@ -28,30 +28,33 @@ public class HelpClassVisitor extends ClassVisitor {
     	
    
     	if(name.equals(this.methodName)) {
-    	System.out.println(String.format("Software_Forensic  method %s - %s", name, desc));
+    		Parameter paramM[] = null;
     	
-    	 try {
-    		 String newClassName = className.replace("/", ".");
-    		    Class<?> act = Class.forName(newClassName);
-    		    System.out.println(newClassName);
-    		    System.out.println(act.getName());
-    		    System.out.println(act.getDeclaredMethods());
-    		    Method fld[] = act.getDeclaredMethods();
-    	         for (int i = 0; i < fld.length; i++)
-    	         {
-    	        	 if(fld[i].getName().equals(this.methodName)) {
-    	             System.out.println("Method Name is : " + fld[i].getName());
-    	             Parameter paraM[] = fld[i].getParameters();
-    	             for (int g = 0; g<paraM.length; g++) {
-    	            	 System.out.println("Variable Name is : " + paraM[g].toString());
-    	             }
-    	        	 }
-    	         }   
-    		 } catch (ClassNotFoundException e) {
-    		        e.printStackTrace();
-    		}
+    		System.out.println(String.format("Software_Forensic  method %s - %s", name, desc));
     	
-        return new HelpMethodVisitor(access, mv, name, className, desc);
+	    	 try {
+	    		 String newClassName = className.replace("/", ".");
+	    		    Class<?> act = Class.forName(newClassName);
+	    		    System.out.println(newClassName);
+	    		    System.out.println(act.getName());
+	    		    System.out.println(act.getDeclaredMethods());
+	    		    Method fld[] = act.getDeclaredMethods();
+	    	         for (int i = 0; i < fld.length; i++)
+	    	         {
+	    	        	 if(fld[i].getName().equals(this.methodName)) {
+		    	             System.out.println("Method Name is : " + fld[i].getName());
+		    	             paramM = fld[i].getParameters();
+		    	       
+		    	             for (int g = 0; g<paramM.length; g++) {
+		    	            	 System.out.println("Variable Name is : " + paramM[g].toString());
+		    	             }
+	    	        	 }
+	    	         }   
+	    		 } catch (ClassNotFoundException e) {
+	    		        e.printStackTrace();
+	    		}
+    	
+	    	 return new HelpMethodVisitor(access, mv, name, className, desc, paramM);
     	}
     	return mv;
     

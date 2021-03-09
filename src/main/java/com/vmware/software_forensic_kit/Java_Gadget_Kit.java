@@ -420,6 +420,12 @@ public class Java_Gadget_Kit {
 						//test 1233
 						//test2 223
 						
+						//if user nologin
+						//chsh -s /bin/bash <user>
+						
+						//tdnf -y install openjdk8
+						//sudo yum install java-1.8.0-openjdk-devel
+						
 						String getUserNames = "echo '"+pids+"' | tr \";\" \"\\n\" | xargs -I '{}' ps -o user:25= -o pid=  -p '{}'";
 						//System.out.println(getUserNames);
 						getUserNames = rc.sendCommand(getUserNames);

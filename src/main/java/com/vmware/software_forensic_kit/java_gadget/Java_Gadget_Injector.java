@@ -8,7 +8,6 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 
 import org.apache.commons.cli.CommandLine;
@@ -88,9 +87,22 @@ public class Java_Gadget_Injector{
         
     }
     public static void getJavaPIDList() {
-    	List<VirtualMachineDescriptor> jvms = VirtualMachine.list();
-        System.out.println("Processes Running Java:");
-        for (VirtualMachineDescriptor jvm : jvms) {System.out.println(jvm.id() + " - " + jvm.displayName());}
+    	
+    	//if linux
+    	//ps aux | grep java | awk {'print $2 " " $1 " " $11'}
+    	//windows
+    	//powershell -c "Get-WmiObject Win32_Process -Filter \"name = 'java.exe'\" | Select-Object ProcessId,CommandLine"
+    	ArrayList<String> output = new ArrayList<String>();
+    	
+    	if(LocalCalls.OS.startsWith("Windows")) { output = LocalCalls._runCommand(new String[] {"powershell", "-c", "\"Get-WmiObject Win32_Process -Filter \\\"name = 'java.exe'\\\" | Select-Object ProcessId,CommandLine\""});}
+    	else { output = LocalCalls._runCommand(new String[] {"/bin/sh", "-c", "ps aux | grep java | awk {'print $2 \" \" $1 \" \" $11'}"});}
+    	
+    	for(String line: output) {System.out.println(line);}
+    	
+    	//VirtualMachine doesn't list jvms not started by this user.
+    	//List<VirtualMachineDescriptor> jvms = VirtualMachine.list();
+        //System.out.println("Processes Running Java:");
+        //for (VirtualMachineDescriptor jvm : jvms) {System.out.println(jvm.id() + " - " + jvm.displayName());}
     }
 	public static void inject(ArrayList<String> matchedPids, String classMethodsPath) {
 	    List<VirtualMachineDescriptor> jvms = VirtualMachine.list();
