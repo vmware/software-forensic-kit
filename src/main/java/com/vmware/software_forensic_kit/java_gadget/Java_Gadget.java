@@ -4,7 +4,6 @@
  ***************************************************/
 package com.vmware.software_forensic_kit.java_gadget;
 
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -24,7 +23,7 @@ public class Java_Gadget{
 	
 	public static void printUsage(HelpFormatter formatter, Options options) {
 		String footer = "Example Usage:\r\n" + 
-        		"	>java -cp software_forensic_kit.jar com.vmware.software_forensic_kit.java_gadget.Java_Gadget -s \"ExampleClass:functionA\" -im -rp my.class.path.  /home/test/testfile.jar\r\n" + 
+        		"	>java -cp software_forensic_kit.jar com.vmware.software_forensic_kit.java_gadget.Java_Gadget -s \"ExampleClass:functionA\" -hm -rp my.class.path.  /home/test/testfile.jar\r\n" + 
         		"	or using wildcards * for filter\r\n" + 
         		"	>java -cp software_forensic_kit.jar com.vmware.software_forensic_kit.java_gadget.Java_Gadget  -s \"ExampleClass*functionA\" -pp -rp my.class.path.  /var/test/example.jar ";
         formatter.setOptionComparator(null);
@@ -51,8 +50,11 @@ public class Java_Gadget{
         options.addOption(Option.builder("rd").longOpt("removeDuplicates")
                 .desc("Remove Duplicate Paths")
                 .build());
-        options.addOption(Option.builder("pp").longOpt("prettyPrint")
+        options.addOption(Option.builder("jp").longOpt("justPrint")
                 .desc("Print output to console")
+                .build());
+        options.addOption(Option.builder("pp").longOpt("prettyPrint")
+                .desc("Pretty Print output to console")
                 .build());
         options.addOption(Option.builder("g").longOpt("graphViz")
                 .desc("Output for Graphviz")
@@ -60,14 +62,20 @@ public class Java_Gadget{
         options.addOption(Option.builder("gm").longOpt("graphVizM")
                 .desc("Output for Graphviz Multiple")
                 .build());
-        options.addOption(Option.builder("i").longOpt("html")
+        options.addOption(Option.builder("hi").longOpt("html")
                 .desc("Output for HTML - https://visjs.org")
                 .build());
-        options.addOption(Option.builder("im").longOpt("htmlM")
+        options.addOption(Option.builder("hm").longOpt("htmlM")
                 .desc("Output for HTML Multiple - https://visjs.org")
                 .build());
         options.addOption(Option.builder("cgf").longOpt("callgraphFile")
                 .desc("Passing in CallGraph file instead of jar(s)")
+                .build());
+        options.addOption(Option.builder("I").longOpt("interactive")
+                .desc("Interactive Mode")
+                .build());
+        options.addOption(Option.builder("v").longOpt("verbose")
+                .desc("Verbose")
                 .build());
         
         return options;
@@ -111,8 +119,7 @@ public class Java_Gadget{
     	
     	String sep = System.getProperty("file.separator");
     	String localCG = "files" + sep + "callgraph";
-    	System.out.println("JAR FILE:" + jarFile);
-    	
+
     	String callgraphFullPath = "";
     	ArrayList<String> jarList = new ArrayList<String>(Arrays.asList(jarFile));
     	
@@ -121,14 +128,8 @@ public class Java_Gadget{
 	    	
 	    	String callgraphOut = LocalCalls.jarFileToCallGraphFile(jarFile);
 	    	
-	    	String jarPath = "";
-	    	
-	    	try {
-				jarPath = LocalCalls.getJarPath();
-			} catch (URISyntaxException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+	    	String jarPath = LocalCalls.getJarPath();
+			
     	
 	    	callgraphFullPath = jarPath + sep + localCG + sep + callgraphOut;
     	}
@@ -142,7 +143,7 @@ public class Java_Gadget{
     	
     }
     public static void executeRequestUsingCGFile(HashMap<String, String> options, String localCG){
-    	System.out.println(options);
+    	//System.out.println(options);
     	CallGraphAnalysis gca = new CallGraphAnalysis(localCG, options);
     	gca.run();
     }

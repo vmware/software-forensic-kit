@@ -3,11 +3,7 @@
 # software-forensic-kit
 
 ## Overview
-Software-Forensic-Kit is a software tool kit to help identify quickly what's inside your binary files. Often times,
-your binaries, including your open source libraries, will encapsulate other open source software. This makes it 
-difficult to determine if a particular function in a certain library is being used by an application on your system. 
-This tool kit will help you find plausible paths to functions of interest by searching through your already built 
-binaries and generating filtered callgraphs.  
+Software-Forensic-Kit is a software tool kit to help identify quickly what's inside your binary files and is code reachable in your application. Often times, your binaries, including your open source libraries, will encapsulate other open source software. This makes it difficult to determine if a particular function in a certain library is being used by an application on your system.  This tool kit will help you find plausible paths to functions of interest by searching through your already built binaries and generating filtered callgraphs and by injecting into the target function and providing details when that function is invoked. 
  
 ![Software-Forensic-Kit Deployment](doc/images/deployment1.png)
 
@@ -41,47 +37,55 @@ mvn clean package
 ### Run
 
 ```
-usage: Software_Forensic_Kit [-h] [-u <USERNAME>] [-p <PASSWORD>] [-d <DOMAIN>] [-f <FILTER>] [-s <FUNCTION>] 
-	[-cd <NUM>] [-rp <arg>] [-rd] [-pp] [-g] [-gm] [-i] [-im] [-o <FOLDER>]
-
-	 -h,--help
-	 -u,--username <USERNAME>			Remote server username
-	 -p,--password <PASSWORD>			Remote server password
-	 -d,--domain <DOMAIN>				Remote server ip
-	 -f,--filter <FILTER>				Jar path must contain this term to be included
-	 -s,--searchFunction <FUNCTION>		Function to search for
-	 -cd,--depth <NUM>					Max callgraph depth (default is 8)
-	 -rp,--removePrefix <arg>			Remove Prefix from callgraph text
-	 -rd,--removeDuplicates				Remove Duplicate Paths
-	 -pp,--prettyPrint					Print output to console
-	 -g,--graphVizM						Output for Graphviz
-	 -gm,--graphVizM					Output for Graphviz Multiple
-	 -i,--html							Output for HTML - https://visjs.org
-	 -im,--htmlM 						Output for HTML Multiple -https://visjs.org
-	 -o,--output <FOLDER>             Output to folder
-```
-
+usage: Software_Forensic_Kit [-h] [-u <USERNAME>] [-p <PASSWORD>] [-d
+       <DOMAIN>] [-f <FILTER>] [-s <FUNCTION>] [-cd <NUM>] [-rp <arg>]
+       [-rd] [-jp] [-pp] [-g] [-gm] [-hi] [-hm] [-cgf] [-I] [-v] [-o
+       <FOLDER>]
+ -h,--help
+ -u,--username <USERNAME>         Remote server username
+ -p,--password <PASSWORD>         Remote server password
+ -d,--domain <DOMAIN>             Remote server ip
+ -f,--filter <FILTER>             Jar path must contain this term to be
+                                  included
+ -s,--searchFunction <FUNCTION>   Function to search for
+ -cd,--depth <NUM>                Max callgraph depth (default is 8)
+ -rp,--removePrefix <arg>         Remove Prefix from callgraph text
+ -rd,--removeDuplicates           Remove Duplicate Paths
+ -jp,--justPrint                  Print output to console
+ -pp,--prettyPrint                Pretty Print output to console
+ -g,--graphViz                    Output for Graphviz
+ -gm,--graphVizM                  Output for Graphviz Multiple
+ -hi,--html                       Output for HTML - https://visjs.org
+ -hm,--htmlM                      Output for HTML Multiple -
+                                  https://visjs.org
+ -cgf,--callgraphFile             Passing in CallGraph file instead of
+                                  jar(s)
+ -I,--interactive                 Interactive Mode
+ -v,--verbose                     Verbose
+ -o,--output <FOLDER>             Output to folder
 Example Usage:
 
-```
->java -jar software_forensic_kit-0.0.1-SNAPSHOT-all.jar -u root -d 10.123.157.145 -p test123 -s "ExampleClass:functionA" -f /var/www -im -rp my.class.path.
-```
+>java -jar software_forensic_kit.jar -u root -d 10.160.157.187 -p test123 -s "ExampleClass:functionA" -f /var/www -hm -rp my.class.path.
 
-or using wildcards * for filter
+Or using wildcards * for filter
 
-```
->java -jar software_forensic_kit-0.0.1-SNAPSHOT-all.jar -u root -d 10.123.157.145 -p test123 -s "ExampleClass*functionA" -f /var/www -pp -rp my.class.path. -o C:\test\output
-```
+>java -jar software_forensic_kit.jar -u root -d 10.160.157.187 -p test123 -s "ExampleClass*functionA" -f /var/www -pp -rp my.class.path. -o
+C:\test\output
 
-or locally using
+   If you want to run software forensic kit locally simply exclude (user, domain and password variables)
 
-```
->java -cp software_forensic_kit-0.0.1-SNAPSHOT-all.jar com.vmware.software_forensic_kit.java_gadget.Java_Gadget -s \"ExampleClass:functionA\" -im -rp my.class.path.  /home/test/testfile.jar\r\n" + 
+   >java -jar software_forensic_kit.jar -s "ExampleClass:functionA" -f C:\test -pp
+
+For Interactive Mode:
+   >java -jar software_forensic_kit.jar -I
+
 ```
 
 ## Contributing
 
 The software-forensic-kit project team welcomes contributions from the community. Before you start working with software-forensic-kit, please read our [Developer Certificate of Origin](https://cla.vmware.com/dco). All contributions to this repository must be signed as described on that page. Your signature certifies that you wrote the patch or have the right to pass it on as an open-source patch. For more detailed information, refer to [CONTRIBUTING.md](CONTRIBUTING.md).
+
+Be sure to end all commits with Signed-off-by: <username> <email>
 
 ## License
 software-forensic-kit is available under the BSD-2 License.

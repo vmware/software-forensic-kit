@@ -80,6 +80,29 @@ public class CallGraphNode {
 		}
 
 	}
+	public void justPrint(int maxDepth, String removeFromStart, boolean removeDuplicates) {
+		ArrayList<CallGraphNode> leafs = findLeafs();
+		
+		for(CallGraphNode leafNode : leafs) {
+			String output = leafNode.data;
+			if(removeFromStart != null && output.startsWith(removeFromStart)) {
+				output = output.substring(removeFromStart.length());	
+			}
+			
+			int i = 0;
+			while(leafNode.parent != null) {
+				String parentOut = leafNode.parent.data;
+				if(removeFromStart != null && parentOut.startsWith(removeFromStart)) {
+					parentOut = parentOut.substring(removeFromStart.length());	
+				}
+				output += "\n" + parentOut;
+				leafNode = leafNode.parent;
+				
+			}
+			System.out.println(output + ";");
+		}
+
+	}
 
 	public ArrayList<String> htmlandgraphvizMultiple(boolean returnJSON, int maxDepth, String removeFromStart, boolean removeDuplicates) {
 
