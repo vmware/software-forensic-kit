@@ -8,12 +8,6 @@
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
   </properties>
-  <repositories>
-  <repository>
-    <id>jitpack.io</id>
-    <url>https://jitpack.io</url>
-  </repository>
-  </repositories>
   <dependencies>
   	<dependency>
   		<groupId>com.jcraft</groupId>
@@ -25,11 +19,6 @@
   		<artifactId>commons-cli</artifactId>
   		<version>1.4</version>
   	</dependency>
-  	<dependency>
-	    <groupId>com.github.0xchrisM</groupId>
-	    <artifactId>java-callgraph</artifactId>
-	    <version>0.2</version>
-	</dependency>
 	<dependency>
 	    <groupId>commons-io</groupId>
 	    <artifactId>commons-io</artifactId>
@@ -41,11 +30,10 @@
 	    <version>2.8.9</version>
 	</dependency>
 	<dependency>
-      <groupId>org.apache.bcel</groupId>
-      <artifactId>bcel</artifactId>
-      <version>6.5</version>
-      <scope>provided</scope>
-    </dependency>
+  <groupId>org.apache.bcel</groupId>
+  <artifactId>bcel</artifactId>
+  <version>6.5</version>
+   </dependency>
     <dependency>
     <groupId>org.ow2.asm</groupId>
     <artifactId>asm</artifactId>
@@ -65,7 +53,7 @@
 	  <groupId>com.sun</groupId>
 	  <artifactId>tools</artifactId>
 	  <version>1.8.0</version>
-	  <!--scope>system</scope>
+	  <!-- scope>system</scope>
 	  <systemPath>C:\Program Files\Java\jdk1.8.0_162\lib\tools.jar</systemPath-->
 	</dependency>
   </dependencies>

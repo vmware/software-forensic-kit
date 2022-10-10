@@ -1,7 +1,13 @@
 package com.vmware.software_forensic_kit.java_gadget.agent;
 
 import static org.objectweb.asm.Opcodes.ALOAD;
+import static org.objectweb.asm.Opcodes.ILOAD;
+import static org.objectweb.asm.Opcodes.DLOAD;
 import static org.objectweb.asm.Opcodes.ASTORE;
+import static org.objectweb.asm.Opcodes.FSTORE;
+import static org.objectweb.asm.Opcodes.LSTORE;
+import static org.objectweb.asm.Opcodes.DSTORE;
+import static org.objectweb.asm.Opcodes.ISTORE;
 import static org.objectweb.asm.Opcodes.DUP;
 import static org.objectweb.asm.Opcodes.GETSTATIC;
 import static org.objectweb.asm.Opcodes.INVOKESPECIAL;
@@ -46,15 +52,61 @@ public class HelpMethodVisitor extends GeneratorAdapter {
 		this.visitFieldInsn(GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;");
 		this.visitVarInsn(LLOAD, index);
 		this.visitMethodInsn(INVOKEVIRTUAL, "java/io/PrintStream", "println", "(J)V", false);
-	}
+	}*/
 	
 	public void visitVarInsn​(int opcode, int var) {
 		super.visitVarInsn(opcode, var);
-		System.out.println(String.format("HERE??? %d %d", opcode, var));
-		this.visitFieldInsn(GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;");
-		this.visitVarInsn(LLOAD, var);
-		this.visitMethodInsn(INVOKEVIRTUAL, "java/io/PrintStream", "println", "(J)V", false);
-	}*/
+		//if(var > 8) {
+		
+		
+		if(opcode == ASTORE || opcode == LSTORE  || opcode == ISTORE || opcode == DSTORE ) {
+			
+			Type local = null;
+			try {
+			local = this.getLocalType(var);
+			
+			}
+			catch(Exception e) {
+				local = this.getReturnType();
+			}
+			if(local != null) {
+			System.out.println(String.format("HERE??? %d %d", opcode, var));
+			System.out.println(this.getLocalType(var).getDescriptor());
+			
+			if(opcode == ISTORE) {
+				this.visitFieldInsn(GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;");
+			this.visitVarInsn(Opcodes.ILOAD, var);
+			this.visitMethodInsn(INVOKEVIRTUAL, "java/io/PrintStream", "println", String.format("(%s)V", Type.INT_TYPE.getDescriptor()), false);
+			}
+			else if(opcode == DSTORE) {
+				this.visitFieldInsn(GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;");
+				this.visitVarInsn(Opcodes.DLOAD, var);	
+				this.visitMethodInsn(INVOKEVIRTUAL, "java/io/PrintStream", "println", String.format("(%s)V", Type.DOUBLE_TYPE.getDescriptor()), false);
+			}
+			else if(opcode == ASTORE) {
+				
+				if(local.getDescriptor().startsWith("L")) {
+					this.visitFieldInsn(GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;");
+					this.visitVarInsn(Opcodes.ALOAD, var);
+					this.visitMethodInsn(INVOKEVIRTUAL, "java/io/PrintStream", "println",String.format("(%s)V", local.getDescriptor()), false);
+				}
+				
+			}
+			else if(opcode == LSTORE) {
+				this.visitFieldInsn(GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;");
+				this.visitVarInsn(Opcodes.LLOAD, var);
+				this.visitMethodInsn(INVOKEVIRTUAL, "java/io/PrintStream", "println", String.format("(%s)V", Type.LONG_TYPE.getDescriptor()), false);
+				
+			}
+			//if(opcode == DSTORE) then println Double.. etc... 
+			
+			//this.visitMethodInsn(INVOKEVIRTUAL, "java/io/PrintStream", "println", String.format("(%s)V", this.getLocalType(var).getDescriptor()), false);
+			}
+			}//}
+		
+		
+		
+	}
 	@Override
 	public void visitCode()  {
 		
@@ -101,7 +153,12 @@ public class HelpMethodVisitor extends GeneratorAdapter {
 
 				this.visitTypeInsn(NEW, "java/lang/StringBuilder");
 				this.visitInsn(DUP);
-				this.visitLdcInsn("{'param"+i+"':'" + paramM[i] + "', 'value':'");
+				if(i < paramM.length) {
+					this.visitLdcInsn("{'param"+i+"':'" + paramM[i] + "', 'value':'");
+				}
+				else {
+					this.visitLdcInsn("{'param"+i+"':'" + args[i].getClassName() + "', 'value':'");
+				}
 				
 				this.visitMethodInsn(INVOKESPECIAL, "java/lang/StringBuilder", "<init>", "(Ljava/lang/String;)V", false);
 				this.loadArg(i);

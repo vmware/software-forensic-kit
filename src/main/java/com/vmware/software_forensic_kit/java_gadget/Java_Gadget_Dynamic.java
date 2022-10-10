@@ -109,7 +109,9 @@ public class Java_Gadget_Dynamic{
 
     	Map<String, String> jarsToCG = uniqueJars.stream().collect(Collectors.toMap(x -> String.format("%s%s", callgraphFullPath + sep, LocalCalls.jarFileToCallGraphFile(x)), x -> x.toString()));
     	//LocalCalls._runCommand(new String[] {"/bin/sh", "-c", "cwd"});
-    	output = LocalCalls._runCommand(new String[] {"/bin/sh", "-c", "grep -rl " + funcName + " " + callgraphFullPath});
+    	//TODO replace * with .* for grep
+    	System.out.println(String.format("'grep -rl %s %s'", funcName, callgraphFullPath));
+    	output = LocalCalls._runCommand(new String[] {"/bin/sh", "-c", String.format("grep -rl %s %s", funcName, callgraphFullPath)});
     	System.out.println(String.format("\n%s", String.join("\n", output) ));
     	
     	
