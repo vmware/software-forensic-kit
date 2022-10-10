@@ -143,6 +143,8 @@ public class LocalCalls{
 		options.add("-m");
 		int total = jarList.size();
 		createdJarNumber = 0;
+		makeDirsNearJar(fileLoc);
+		
 		try {
 			for (String jar : jarList) {
 			
@@ -151,7 +153,7 @@ public class LocalCalls{
 					
 					if(new File(jarPath + sep + fileLoc + sep + outputFile).exists() == false) {
 						Runtime runtime = Runtime.getRuntime();
-				    	String[] commands = {"java", "-cp", jarPath + sep + jarName, "gr.gousiosg.javacg.stat.JCallGraph", "-m", jar};
+				    	String[] commands = {"java", "-cp", jarPath + sep + jarName, "com.vmware.software_forensic_kit.java_gadget.local.JarCallGraph", jar};
 				    
 						try {
 	

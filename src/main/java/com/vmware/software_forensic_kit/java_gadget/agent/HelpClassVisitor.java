@@ -16,18 +16,20 @@ public class HelpClassVisitor extends ClassVisitor {
     private String methodName;
            
     public HelpClassVisitor(ClassVisitor cv, String pClassName, String methodName) {
-	super(Opcodes.ASM5, cv);
+    	super(Opcodes.ASM5, cv);
 		this.className = pClassName;
 		this.methodName = methodName;
+		
+		
     }
-                                                         
+    
     @Override
     public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
     	MethodVisitor mv = super.visitMethod(access, name, desc, signature,
                 exceptions);
     	
    
-    	if(name.equals(this.methodName)) {
+    	if(true) {//name.equals(this.methodName)) {
     		Parameter paramM[] = null;
     	
     		System.out.println(String.format("Software_Forensic  method %s - %s", name, desc));
@@ -56,6 +58,7 @@ public class HelpClassVisitor extends ClassVisitor {
     	
 	    	 return new HelpMethodVisitor(access, mv, name, className, desc, paramM);
     	}
+    	else
     	return mv;
     
     } 

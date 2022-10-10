@@ -46,6 +46,8 @@ public class Java_Gadget_AgentTransformer implements ClassFileTransformer {
             ClassVisitor profiler = new HelpClassVisitor(cw, className, this.methodName);
          
             CheckClassAdapter checker = new CheckClassAdapter(profiler, true);
+           
+            
             // Add the class adapter as a modifier
             reader.accept(checker, 0);
             result = cw.toByteArray();
