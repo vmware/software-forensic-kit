@@ -1,9 +1,6 @@
 package com.vmware.software_forensic_kit.java_gadget;
 
-import java.io.Console;
-import java.io.EOFException;
-import java.io.IOException;
-import java.io.ObjectInputStream;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -114,7 +111,7 @@ public class Java_Gadget_Injector{
 			Runnable runnable = () -> { 
 	    	    System.out.println("Server started on port 31337.");
 	    	    Console console = System.console();
-	    	   
+
 	    	    while(exitserver == false) {
 	    	    	String out = console.readLine("Listening For Client Input: [E]xit");
 	    	    	exitserver = out.matches("(?i)e");
@@ -164,24 +161,22 @@ public class Java_Gadget_Injector{
 	    	
 			    	while(exitserver == false){ 
 			    	
-			             Socket socket = server.accept();
-			             ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
-			             String message = "";
+			    		Socket socket = server.accept();
+						InputStream inputStream = socket.getInputStream();
+						String message = "";
+						byte[] buffer = new byte[1024];
 			             while(true) {
 			             	try {
-			             		//try to read all objects and catch fail if no more objects
-			             		message = (String) ois.readObject();
-			             		System.out.println("" + message);
+								//not readObject
+								int bytesRead = inputStream.read(buffer);
+								message = new String(buffer, 0, bytesRead);
+								System.out.println("Received message: " + message);
 			             	}
 			             	catch (EOFException e) {
 			             		 break;
-			             	} catch (ClassNotFoundException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
-			             }
-			
-			             ois.close();
+			             	}
+						 }
+						 inputStream.close();
 			             socket.close();
 			             if(message.equalsIgnoreCase("exit")) break;
 			    		
